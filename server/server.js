@@ -29,12 +29,12 @@ var db = mongoose.connection;
 
 // connection established
 db.on('connected', () => {
-    console.log('Database connection established @port:' +portDB);
+    console.log('Database connection established ');
 });
 
 db.on('error', (err) => {
     if(err) {
-        console.log('Database connection error @port:' +portDB+ " " +err );
+        console.log('Database connection error @port:'+err );
     }
 });
 
