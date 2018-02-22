@@ -78,7 +78,7 @@ app.use(function(req, res, next) {
 // });
 
 var port = 4444;
-app.listen(port, function () {
+app.listen(process.env.port, function () {
     console.log('Listening http://localhost:'+port);
 });
 
