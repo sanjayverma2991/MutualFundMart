@@ -19,9 +19,9 @@ require('./schemas/userSchema.js');
 
 var app = express();
 
-var portDB = 27017;
+// var portDB = 27017;
 // var connectDB = 'mongodb://localhost:' +portDB+ '/mutual-fund-mart';
-var connectDB = 'mongodb://admin:Wipro@123@ds127132.mlab.com:27132/mutual-fund-mart'
+var connectDB = 'mongodb://admin:wipro123@ds127132.mlab.com:27132/mutual-fund-mart'
 mongoose.Promise = global.Promise;
 mongoose.connect(connectDB);
 var db = mongoose.connection;
