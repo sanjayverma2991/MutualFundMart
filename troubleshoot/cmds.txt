@@ -1,0 +1,13 @@
+
+
+** kill process at port:
+$ netstat -ano | findstr :8888
+> TCP    0.0.0.0:8888           0.0.0.0:0              LISTENING       4732
+  TCP    [::]:8888              [::]:0                 LISTENING       4732
+
+  
+$ taskkill /PID 4732 /F
+> SUCCESS: The process with PID 4732 has been terminated.
+
+---------------------------------------------------------------------------
+

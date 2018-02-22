@@ -1,0 +1,121 @@
+<br/><br/><br/><br/>
+<div class="container">
+        <h3>My Profile</h3>
+        <hr>
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-4">
+            <div class="text-center">
+            <img [src]="userImgSrcPrefix + user.gender + imgPNGExtension" class="img-fluid" alt="user_img">
+              <h6>{{user?.name.f_name}}</h6>
+              <!-- <input type="file" class="form-control"> -->
+            </div>
+          </div>
+          
+          <!-- edit form column -->
+          <div class="col-md-8 personal-info">
+            <div class="alert alert-info alert-dismissable" *ngIf="editAlert">
+              <a class="panel-close close" (click)="dismissAlert()" data-dismiss="alert">×</a> 
+              <!-- <i class="fa fa-coffee"></i> -->
+              {{msg}}
+            </div>
+            
+            <form class="form-horizontal" role="form" #userEditRef="ngForm" (ngSubmit)="onSaveChanges(userEditRef.value)">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <h5>Personal info</h5> 
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <input type="button" class="btn btn-primary btn-md" (click)="editClicked()" *ngIf="!editMode" value="Edit">
+                        <input type="submit" class="btn btn-primary btn-md" *ngIf="editMode" [disabled]="userEditRef.invalid" value="Save Changes">
+                        <input type="button" class="btn btn-default btn-md" (click)="resetValues()" *ngIf="editMode" value="Cancel">
+                    </div>
+                </div> <br> <br>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="control-label" for="f_nameE">First name</label>
+                        <input type="text" class="form-control" [disabled]="!editMode" name="f_nameE" id="f_nameE" [(ngModel)]="user?.name.f_name" required minlength="3" #fnameRef="ngModel">
+                        <div *ngIf="fnameRef.invalid && (fnameRef.dirty || fnameRef.touched)" class="alert alert-danger">
+                            <div *ngIf="fnameRef.errors.required">
+                                    *required
+                            </div>
+                            <div *ngIf="fnameRef.errors.minlength">
+                                    *minimum 3 char long
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="control-label" for="l_nameE">Last name</label>
+                        <input type="text" class="form-control" [disabled]="!editMode" name="l_nameE" id="l_nameE" [(ngModel)]="user?.name.l_name" required minlength="3" #lnameRef="ngModel">
+                        <div *ngIf="lnameRef.invalid && (lnameRef.dirty || lnameRef.touched)" class="alert alert-danger">
+                            <div *ngIf="lnameRef.errors.required">
+                                *required
+                            </div>
+                            <div *ngIf="lnameRef.errors.minlength">
+                                *minimum 3 char long
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="email_idE">Email</label>
+                    <input type="email" class="form-control" [disabled]="true" name="email_idE" id="email_idE" [(ngModel)]="user.email_id" required email #emailRef="ngModel">
+                    <div *ngIf="emailRef.invalid && (emailRef.dirty || emailRef.touched)" class="alert alert-danger">
+                        <div *ngIf="emailRef.errors.required">
+                            *required
+                        </div>
+                        <div *ngIf="emailRef.errors.email">
+                            *wrong email-id
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="control-label" for="phoneE">Phone</label>
+                        <input type="text" class="form-control" name="phoneE" id="phoneE" [disabled]="!editMode" [(ngModel)]="user.phone" required minlength="10" maxlength="10" #phoneRef="ngModel">
+                        <div *ngIf="phoneRef.invalid && (phoneRef.dirty || phoneRef.touched)" class="alert alert-danger">
+                            <div *ngIf="phoneRef.errors.required">
+                                *required
+                            </div>
+                            <div *ngIf="phoneRef.errors.minlength">
+                                Phone number must be 10 digit.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="genderE">Gender</label>
+                        <select class="form-control" id="genderE" name="genderE" [disabled]="!editMode" [(ngModel)]="user.gender" required #genderRef="ngModel">
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                        <div *ngIf="genderRef.invalid && (genderRef.dirty || genderRef.touched)" class="alert alert-danger">
+                            <div *ngIf="genderRef.errors.required">
+                                    *required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+              <div class="form-row">
+                  <div class="form-group col-md-6">
+                      <label class="control-label" for="net_amtE">Net amount</label>
+                      <input type="text" class="form-control" [disabled]="true" name="net_amtE" id="net_amtE" [(ngModel)]="user.net_amount">
+                  </div>
+                  <div class="form-group col-md-6">
+                      <label class="control-label" for="net_fundE">Total funds</label>
+                      <input type="text" class="form-control" [disabled]="true" name="net_fundE" id="net_fundE" [(ngModel)]="user.net_funds">
+                  </div>
+              </div>
+
+              <!-- <div class="form-group">
+                <label class="col-md-3 control-label"></label>
+                <div class="col-md-8">
+                </div>
+              </div> -->
+            </form>
+        </div>
+      </div>
+    </div>

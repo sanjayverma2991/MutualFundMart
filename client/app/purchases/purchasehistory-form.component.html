@@ -1,0 +1,62 @@
+<br/><br/><br/><br/><div align="center">
+  <h3>Purchase History</h3>
+</div>
+
+<div class="container">
+  <hr> <br>
+  <div class="text-center" *ngIf='!orders.length'>
+    No orders yet.
+  </div>
+
+  <div class="row" *ngIf='orders && orders.length'>
+    <div class="card-group col-sm-12 mb-5" *ngFor='let _order of orders'>
+      <div class="card">
+        <div class="card-header text-right">
+          <div class="row">
+            <div class="col-sm-6">
+              <ul class="demo text-left">
+                <li>
+                  <h5>Order Id: {{_order.order_id}}</h5>
+                </li>
+                <li>
+                  <b>Total: ₹ {{_order.net_amount}} | Funds: {{_order.net_funds}}</b>
+                </li>
+              </ul>
+            </div>
+            <div class="col-sm-6" *ngIf="_userService.isPrivilegeUser()">
+              <ul class="demo text-right">
+                <li>
+                  <h5>Buyer Name:&nbsp;{{_order.buyer_name}}</h5>
+                </li>
+                <li>{{_order.email_id}}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped" style="font-size:medium">
+              <thead>
+                <tr>
+                  <th scope="col">Category Name > Scheme Name</th>
+                  <th class="text-center" scope="col">NAV</th>
+                  <th class="text-center" scope="col">QTY</th>
+                  <th class="text-center" scope="col">Amount</th>
+                </tr>
+              </thead>
+              <tbody *ngIf='_order.purchase && _order.purchase.length'>
+                <tr *ngFor='let _fund of _order.purchase'>
+                  <td>{{_fund.c_name}} > {{_fund.s_name}}</td>
+                  <td class="text-center">{{_fund.NAV}}</td>
+                  <td class="text-center">{{_fund.qty}}</td>
+                  <td class="text-center">{{_fund.NAV * _fund.qty}}</td>
+                </tr>
+              </tbody>
+            </table>
+            <footer class="blockquote-footer text-right">Purchased On
+                <cite title="Source Title">{{_order.p_date}}</cite>
+            </footer>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

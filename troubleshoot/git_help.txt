@@ -1,0 +1,31 @@
+
+// git helps
+
+// add files to commit
+$ git add .
+
+// commit
+$ git commit -m "ilp-02 first checkin"
+
+// push
+$ git push origin master
+
+
+
+
+
+
+// config list
+$ git config --list
+
+// reset username password
+$ git config --system --unset credential.helper
+
+// unset git proxy
+$ git config --global --unset http.proxy
+
+// current proxy
+$ git config --global --get http.proxy
+
+// set proxy
+$ git config --global http.proxy http://username@pwd@proxy4.wipro.com:8080

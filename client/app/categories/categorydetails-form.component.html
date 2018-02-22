@@ -1,0 +1,446 @@
+<br/><br/><br/><br/><div class="container-fluid">
+    <h3>{{category.c_name}}</h3>
+    <hr>
+    <div class="row">
+        <!-- left image column -->
+        <div class="col-md-1"></div>
+        <div class="col-md-3 text-center">
+            <img [src]="catgImgSrcPrefix + category.c_img + imgJPGExtension" class="avatar img-fluid" alt="avatar">
+        </div>
+
+        <!-- right form column -->
+        <div class="col-md-7 personal-info">
+            <div class="alert alert-info alert-dismissable" *ngIf="editAlert">
+                <a class="panel-close close" (click)="dismissAlert()" data-dismiss="alert">×</a>
+                {{msg}}
+            </div>
+
+            <form class="form-horizontal" role="form" #catgEditRef="ngForm" (ngSubmit)="onSaveChangesCatg(catgEditRef.value)">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <!-- <h5>Category details:</h5> -->
+                    </div>
+                    <div class="col-md-6 text-right" *ngIf="_usersService.isPrivilegeUser()">
+                        <button type="button" class="btn btn-primary btn-md" (click)="editClicked()" *ngIf="!editMode">
+                            Edit &nbsp;
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
+
+                        <button type="submit" class="btn btn-success btn-md" *ngIf="editMode" [disabled]="catgEditRef.invalid">
+                            Save Changes &nbsp;
+                            <i class="fas fa-save fa-lg" data-fa-transform="grow-2"></i>
+                        </button>
+                        <button type="button" class="btn btn-warning btn-md" (click)="resetValues()" *ngIf="editMode">
+                            Cancel &nbsp;
+                            <i class="fas fa-times fa-lg" data-fa-transform="grow-2"></i>
+                        </button>
+                    </div>
+                </div>
+                <br>
+
+                <div class="form-row" *ngIf="editMode">
+                    <div class="form-group col-md-8">
+                        <label class="control-label" for="categorynameE">Name</label>
+                        <input type="text" class="form-control" [disabled]="!editMode" name="categorynameE" id="categorynameE" [(ngModel)]="category.c_name"
+                            required minlength="3" #categorynameRef="ngModel">
+                        <div *ngIf="categorynameRef.invalid && (categorynameRef.dirty || categorynameRef.touched)" class="alert alert-danger">
+                            <div *ngIf="categorynameRef.errors.required">
+                                *required
+                            </div>
+                            <div *ngIf="categorynameRef.errors.minlength">
+                                *minimum 3 char long
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="c_imgE">Choose image</label>
+                        <select class="form-control" [disabled]="!editMode" id="c_imgE" name="c_imgE" [(ngModel)]="category.c_img" #cImgERef="ngModel">
+                            <option *ngFor="let _color of img_colors" [value]="_color">
+                                {{_color}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row" *ngIf="editMode">
+                    <div class="form-group col-md-12">
+                        <label class="control-label" for="cateorydescriptionE">Description</label>
+                        <textarea class="form-control" [disabled]="!editMode" name="cateorydescriptionE" id="cateorydescriptionE" [(ngModel)]="category.c_description"
+                            required minlength="3" rows="3" #cateorydescriptionRef="ngModel" style="height: max-content;"> </textarea>
+                        <div *ngIf="cateorydescriptionRef.invalid && (cateorydescriptionRef.dirty || cateorydescriptionRef.touched)" class="alert alert-danger">
+                            <div *ngIf="cateorydescriptionRef.errors.required">
+                                *required
+                            </div>
+                            <div *ngIf="cateorydescriptionRef.errors.minlength">
+                                *minimum 3 char long
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="!editMode">
+                    <div class="col-md-12">
+                        <h5>Description</h5>
+                        <p>
+                            {{category.c_description}}
+                        </p>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <!-- category info col-md-7 -->
+        <div class="col-md-1"></div>
+    </div>
+    <!-- row for category details -->
+    <hr>
+    <br>
+
+    <!-- scheme card page -->
+    <div>
+        <h4>Schemes</h4>
+    </div>
+    <div class="container-fluid">
+        <div class="text-center" *ngIf='!category.scheme.length'>
+            No schemes yet. Please add one.
+        </div>
+
+        <div class="row" *ngIf='category.scheme && category.scheme.length'>
+            <div class="card-group col-sm-3 mb-5" *ngFor='let scheme of category.scheme'>
+                <div class="card">
+                    <img class="card-img-top" [src]="schImgSrcPrefix + scheme.s_img + imgJPGExtension" alt="scheme_image">
+                    <div class="card-body">
+                        <h5 class="card-title cur-pointer" data-toggle="modal" data-target="#viewScheme" (click)="viewSchemeData(scheme)">{{scheme.s_name | uppercase}}</h5>
+                        <p class="card-text">{{scheme.s_description | slice:0:100}}
+                            <a class="text-Link" *ngIf="scheme.s_description.length > 100" data-toggle="modal" data-target="#viewScheme" (click)="viewSchemeData(scheme)">
+                                ..more</a>
+                        </p>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-sm-5 text-left">
+                                    <small class="text-muted">NAV: &nbsp;
+                                        <i class="fas fa-rupee-sign fs-xs"></i> {{scheme.NAV}}</small>
+                                </div>
+
+                                <div class="col-sm-7 text-right">
+                                    <button type="button" class="btn btn-link btn-sm" *ngIf="_usersService.isAuthenticated() && !_usersService.isPrivilegeUser()  && inCart(scheme.scheme_id)">
+                                        <i class="fas fa-check fa-lg btnGreen" data-fa-transform="grow-2"></i>
+                                    </button>
+
+                                    <button type="button" class="btn btn-link btn-sm" *ngIf="_usersService.isAuthenticated() && !_usersService.isPrivilegeUser() && !inCart(scheme.scheme_id)"
+                                        (click)="addToCart(scheme, 'reqFromCard')">
+                                        <i class="fas fa-cart-plus fa-lg btnSkyblue" data-fa-transform="grow-2"></i>
+                                    </button>
+
+                                    <button type="button" class="btn btn-link btn-sm p-0" data-toggle="modal" data-target="#viewScheme" (click)="viewSchemeData(scheme)">
+                                        <i class="fas fa-eye fa-lg btnOrange" data-fa-transform="grow-2"></i>
+                                    </button>
+
+                                    <button type="button" class="btn btn-link btn-sm p-0" *ngIf="_usersService.isPrivilegeUser() && !scheme.sold" (click)="deleteScheme(scheme.scheme_id, scheme.s_name, 'reqFromCard')">
+                                        <i class="fas fa-trash-alt fa-lg btnRed" data-fa-transform="grow-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- footer row -->
+                        </div>
+                    </div>
+                    <!-- card footer-->
+
+                </div>
+                <!-- card -->
+            </div>
+            <!-- card-deck -->
+        </div>
+        <!-- row for scheme card -->
+    </div>
+</div>
+<!-- container-fluid -->
+
+<!-- modal for scheme view and update -->
+<div class="modal fade" id="viewScheme" tabindex="-1" role="dialog" aria-labelledby="viewSchemeTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewSchemeTitle">{{schemeViewModal.s_name}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="dismissSchemeModal(); schemeEditRef.resetForm()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!-- scheme view modal header -->
+
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <!-- left image column -->
+                        <div class="col-md-3 text-center">
+                            <img [src]="schImgSrcPrefix + schemeViewModal.s_img + imgJPGExtension" class="avatar img-fluid" alt="scheme_img">
+                        </div>
+
+                        <!-- right form column -->
+                        <div class="col-md-9 personal-info">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="alert alert-info alert-dismissable" *ngIf="schemeEditAlert">
+                                        <a class="panel-close close" (click)="dismissSchemeAlert()" data-dismiss="alert">×</a>
+                                        {{schemeMsg}}
+                                    </div>
+                                    <!-- scheme alert -->
+                                </div>
+                            </div>
+                            <!-- scheme alert row -->
+
+                            <form class="form-horizontal" role="form" #schemeEditRef="ngForm" (ngSubmit)="onSaveChangesScheme(schemeEditRef.value, schemeViewModal.scheme_id)">
+                                <div class="row">
+                                    <div class="col-md-4 text-left">
+                                        <!-- <h5>Scheme details:</h5> -->
+                                    </div>
+                                    <div class="col-md-8 text-right" *ngIf="_usersService.isPrivilegeUser()">
+                                        <button type="button" class="btn btn-primary btn-md" *ngIf="!schemeEditMode" (click)="editSchemeClicked()">
+                                            Edit &nbsp;
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </button>&nbsp;
+
+                                        <button type="submit" class="btn btn-success btn-md" *ngIf="schemeEditMode" [disabled]="schemeEditRef.invalid">
+                                            Save Changes &nbsp;
+                                            <i class="fas fa-save fa-lg" data-fa-transform="grow-2"></i>
+                                        </button>&nbsp;
+
+                                        <button type="button" class="btn btn-warning btn-md" *ngIf="schemeEditMode" (click)="resetSchemeValues()">
+                                            Cancel &nbsp;
+                                            <i class="fas fa-times fa-lg" data-fa-transform="grow-2"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- row for top buttons -->
+                                <br>
+
+                                <div class="row" *ngIf="schemeEditMode">
+                                    <div class="form-group col-md-12">
+                                        <label class="control-label" for="s_nameE">Name</label>
+                                        <input type="text" class="form-control" [disabled]="!schemeEditMode" name="s_nameE" id="s_nameE" [(ngModel)]="schemeViewModal.s_name"
+                                            required minlength="3" #snameRef="ngModel">
+                                        <div *ngIf="snameRef.invalid && (snameRef.dirty || snameRef.touched)" class="alert alert-danger">
+                                            <div *ngIf="snameRef.errors.required">
+                                                *required
+                                            </div>
+                                            <div *ngIf="snameRef.errors.minlength">
+                                                *minimum 3 char long
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- row for scheme name -->
+
+                                <div class="row" *ngIf="schemeEditMode">
+                                    <div class="form-group col-md-12">
+                                        <label class="control-label" for="s_descriptionE">Description</label>
+                                        <textarea class="form-control" [disabled]="!schemeEditMode" name="s_descriptionE" id="s_descriptionE" [(ngModel)]="schemeViewModal.s_description"
+                                            required minlength="3" rows="3" #sdescriptionRef="ngModel" style="height: max-content"></textarea>
+                                        <div *ngIf="sdescriptionRef.invalid && (sdescriptionRef.dirty || sdescriptionRef.touched)" class="alert alert-danger">
+                                            <div *ngIf="sdescriptionRef.errors.required">
+                                                *required
+                                            </div>
+                                            <div *ngIf="sdescriptionRef.errors.minlength">
+                                                *minimum 3 char long
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" *ngIf="!schemeEditMode">
+                                        <div class="col-md-12">
+                                            <h5>Description</h5>
+                                            <p>
+                                                {{schemeViewModal.s_description}}
+                                            </p>
+                                        </div>
+                                </div>
+                                
+
+                                <!-- row for scheme NAV and image -->
+                                <div class="row" *ngIf="schemeEditMode">
+                                        <div class="form-group col-md-7">
+                                            <label class="control-label" for="s_NAVE">NAV</label>
+                                            <input type="text" class="form-control" [disabled]="!schemeEditMode" name="s_NAVE" id="s_NAVE" [(ngModel)]="schemeViewModal.NAV"
+                                                required #sNAVRef="ngModel">
+                                            <div *ngIf="sNAVRef.invalid && (sNAVRef.dirty || sNAVRef.touched)" class="alert alert-danger">
+                                                <div *ngIf="sNAVRef.errors.required">
+                                                    *required
+                                                </div>
+                                            </div>
+                                        </div>
+                    
+                                        <div class="form-group col-md-5">
+                                            <label for="s_imgE">Choose image</label>
+                                            <select class="form-control" [disabled]="!schemeEditMode" id="s_imgE" name="s_imgE" [(ngModel)]="schemeViewModal.s_img" #sImgRef="ngModel">
+                                                <option *ngFor="let _color of img_colors" [value]="_color">
+                                                    {{_color}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                </div>
+                                <!-- row for scheme description -->
+                                
+                                <div class="row">
+                                    <div class="col-md-12 text-right">
+                                        <p>
+                                            <a class="text-muted ">INCEPTION DATE: {{schemeViewModal.last_modified}} &nbsp;|&nbsp; SOLD: {{schemeViewModal.sold}}</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- scheme view edit form -->
+                        </div>
+                        <!-- scheme view col-9 -->
+                    </div>
+                </div>
+            </div>
+            <!-- scheme view modal body -->
+
+            <div class="modal-footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-4 text-left">
+                            <a class="text-muted">NAV: &nbsp;
+                                <i class="fas fa-rupee-sign fs-xs"></i> {{schemeViewModal.NAV}}</a>
+                        </div>
+
+                        <div class="col-sm-8 text-right">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="dismissSchemeModal(); schemeEditRef.resetForm()">
+                                Close &nbsp;
+                                <i class="fas fa-times fa-lg" data-fa-transform="grow-2"></i>
+                            </button>
+
+                            <button type="button" class="btn btn-info" *ngIf="_usersService.isAuthenticated() && !_usersService.isPrivilegeUser() && !schemeEditMode && !inCart(schemeViewModal.scheme_id)"
+                                (click)="addToCart('', 'reqFromModal')">
+                                Add to cart &nbsp;
+                                <i class="fas fa-cart-plus fa-lg" data-fa-transform="grow-2"></i>
+                            </button>&nbsp;
+
+                            <button type="button" class="btn btn-success" *ngIf="_usersService.isAuthenticated() && !_usersService.isPrivilegeUser() && !schemeEditMode && inCart(schemeViewModal.scheme_id)"
+                                data-dismiss="modal" [routerLink]="['/cart']">
+                                Go to cart &nbsp;
+                                <i class="fab fa-opencart fa-lg" data-fa-transform="grow-2"></i>
+                            </button>&nbsp;
+
+                            <button type="button" class="btn btn-danger" *ngIf="_usersService.isAuthenticated() && _usersService.isPrivilegeUser() && !schemeEditMode && !schemeViewModal.sold"
+                                (click)="deleteScheme(schemeViewModal.scheme_id, schemeViewModal.s_name, 'reqFromModal')">
+                                Delete &nbsp;
+                                <i class="fas fa-trash-alt fa-lg" data-fa-transform="grow-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- scheme view modal footer -->
+        </div>
+        <!-- scheme view modal content -->
+    </div>
+</div>
+<!-- modal for scheme view and update -->
+
+<!-- add scheme button -->
+<div class="fixed-bottom text-right m-3" *ngIf="_usersService.isPrivilegeUser()">
+    <button type="button" class="btn btn-link p-0" data-toggle="modal" data-target="#addScheme" (click)="resetAddSchemeForm()">
+        <i class="fas fa-plus-circle fa-4x btnRed"></i>
+    </button>
+
+    <button type="button" class="btn btn-link p-0"  [routerLink]="['/charts']">
+            <i class="fas fa-chart-area fa-4x btnOrange" data-fa-transform="shrink-5.0" data-fa-mask="fas fa-circle"></i>
+    </button>
+
+    <button type="button" class="btn btn-link p-0" [routerLink]="['/purchaseHistory']">
+            <i class="fas fa-history fa-4x btnRed" data-fa-transform="shrink-5.0" data-fa-mask="fas fa-circle"></i>
+    </button>
+</div>
+
+<!-- purchase button -->
+<div class="fixed-bottom text-right m-3" *ngIf="!_usersService.isPrivilegeUser() && _usersService.isAuthenticated()">
+    <button type="button" class="btn btn-link" [routerLink]="['/cart']">
+        <span class="fa-4x fa-layers fa-fw">
+            <i class="fas fa-cart-arrow-down btnGreen"></i>
+            <span class="fa-layers-counter" style="background:grey">{{cartContent}}</span>
+        </span>
+        <!-- <i class="fas fa-cart-arrow-down fa-5x btnOrange" ></i> -->
+    </button>
+</div>
+
+<!-- modal for adding scheme -->
+<div class="modal fade" id="addScheme" tabindex="-1" role="dialog" aria-labelledby="addSchemeTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addSchemeTitle">Add new scheme</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="dismissSchemeModal(); schemeAddRef.resetForm()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!-- add scheme modal header -->
+
+            <div class="modal-body">
+                <div class="container">
+                    <form class="form-horizontal" role="form" #schemeAddRef="ngForm" (ngSubmit)="onAddScheme(schemeAddRef.value); schemeAddRef.resetForm()">
+                        <div class="form-group">
+                            <label for="s_nameAM">Name</label>
+                            <input type="text" class="form-control" id="s_nameAM" name="s_nameAM" [(ngModel)]="s_nameAM" required minlength="3" #schemenameRef="ngModel">
+                            <div *ngIf="schemenameRef.invalid && (schemenameRef.dirty || schemenameRef.touched)" class="alert alert-danger">
+                                <div *ngIf="schemenameRef.errors.required">
+                                    *required
+                                </div>
+                                <div *ngIf="schemenameRef.errors.minlength">
+                                    *minimum 3 characters long
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="s_descriptionAM">Description</label>
+                            <textarea class="form-control" id="s_descriptionAM" name="s_descriptionAM" [(ngModel)]="s_descriptionAM" required minlength="10"
+                                rows="7" #schemedescriptionRef="ngModel"></textarea>
+                            <div *ngIf="schemedescriptionRef.invalid && (schemedescriptionRef.dirty || schemedescriptionRef.touched)" class="alert alert-danger">
+                                <div *ngIf="schemedescriptionRef.errors.required">
+                                    *required
+                                </div>
+                                <div *ngIf="schemedescriptionRef.errors.minlength">
+                                    *minimum 10 characters long
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="NAVAM">NAV</label>
+                                <input type="number" class="form-control" id="NAVAM" name="NAVAM" [(ngModel)]="NAVAM" required #schemenavRef="ngModel">
+                                <div *ngIf="schemenavRef.invalid && (schemenavRef.dirty || schemenavRef.touched)" class="alert alert-danger">
+                                    <div *ngIf="schemenavRef.errors.required">
+                                        *required
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="s_imgAM">Choose image</label>
+                                <select class="form-control" id="s_imgAM" name="s_imgAM" [(ngModel)]="s_imgAM" #schemeimgRef="ngModel">
+                                    <option *ngFor="let _color of img_colors" [value]="_color">
+                                        {{_color}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <hr>
+                        <!-- for footer -->
+                        <div class="row">
+                            <div class="col-sm-12 text-right">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="dismissSchemeModal(); schemeAddRef.resetForm()">Close</button>
+                                <button type="submit" class="btn btn-primary" [disabled]="schemeAddRef.invalid">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- add scheme modal body -->
+        </div>
+        <!-- add scheme modal content -->
+    </div>
+</div>
+<!-- modal for adding scheme -->

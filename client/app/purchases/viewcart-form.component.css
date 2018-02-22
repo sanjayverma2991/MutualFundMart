@@ -1,0 +1,21 @@
+
+.card-footer-btn 
+{
+    background-color: orange!important;
+    text-align: center!important;
+    color: white!important;
+}
+
+.card-footer-btn:hover {
+    background-color: rgb(255, 136, 0) !important;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+input[type="number"] {
+    -moz-appearance: textfield;
+    width: 40px;
+}

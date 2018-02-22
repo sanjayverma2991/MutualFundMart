@@ -1,0 +1,113 @@
+<br/><br/><br/><br/><div class="row">
+  <!-- for cart details -->
+  <div class="col-sm-9">
+    <div class="card" id="cart-card">
+      <div class="card-header">MY CART ({{user.cart.length}})</div>
+
+      <div class="card-body">
+        <div class="row" *ngIf='!user.cart.length'>
+          <p class="text-center">Your cart is empty.</p>
+          
+        </div>
+
+        <div *ngIf='user.cart && user.cart.length'>
+          <ul class="list-group list-group-flush" *ngFor='let fund of user.cart'>
+            <li class="list-group-item">
+              <div class="container-fluid">
+                <div class="row">
+                  <!-- for scheme image -->
+                  <div class="col-sm-2">
+                    <img class="img-fluid" [src]="schImgSrcPrefix + fund.s_img + imgJPGExtension" alt="s_img">
+                  </div>
+
+                  <!-- for scheme details -->
+                  <div class="col-sm-5">
+                    <p class="card-text">{{fund.s_name}}
+                      <br>
+                      <small class="text-muted">Category: {{fund.c_name}}</small> &nbsp;|
+                      <a class="btn btn-link px-2 py-1" (click)="delFromCart(fund)" title="Delete from cart">
+                        <i class="fas fa-trash btnRed"></i>
+                        <!-- <strong style="color:red">Remove</strong> -->
+                      </a>
+                    </p>
+                  </div>
+
+                  <!-- for price NAV-->
+                  <div class="col-sm-2 text-center">
+                    <i class="fas fa-rupee-sign"></i> {{fund.NAV}}
+                  </div>
+
+                  <!-- for quantity -->
+                  <div class="col-sm-3 text-center">
+                    <!-- for minus -->
+                    <button type="button" class="btn btn-link p-0" (click)="minusQty(fund)">
+                      <i class="fas fa-minus btnBlack"></i>
+                    </button>
+
+                    <!-- for scheme quantity -->
+                    <input type="number" [(ngModel)]="fund.qty" required min="1" max="999" (change)="changeQty(fund)" #qtyRef="ngModel" style="text-align: center">
+
+                    <!-- for plus -->
+                    <button type="button" class="btn btn-link p-0" (click)="addQty(fund)">
+                      <i class="fas fa-plus btnBlack"></i>
+                    </button>
+                    <div *ngIf="qtyRef.invalid && (qtyRef.dirty || qtyRef.touched)" class="alert alert-danger">
+                        <div *ngIf="qtyRef.errors.required">
+                            *required
+                        </div>
+                        <div *ngIf="qtyRef.errors.min">
+                            *minimum 1
+                        </div>
+                        <div *ngIf="qtyRef.errors.max">
+                            *maximum 999
+                        </div>
+                    </div>
+                  </div>
+                </div> <!-- row- ngfor one cart fund-->
+
+                <!-- if quantity more than 1 -->
+                <div *ngIf='fund.qty > 1'>
+                  <hr>
+                    <p class="text-right">
+                    {{fund.NAV}} (NAV)
+                    X
+                    {{fund.qty}} (QTY) = {{fund.NAV * fund.qty}}/-
+                    </p>
+                  </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <!-- for ngif cart contenet -->
+
+      </div>
+      <!-- cart card body -->
+
+
+      <!-- cart card footer -->
+      <div class="card-footer text-right">
+        <a class="btn btn-primary btnWhite" (click)="continueShopping()">
+          <i class="fas fa-angle-left fa-lg"></i>&nbsp; CONTINUE SHOPPING</a>
+      </div>
+
+    </div>
+    <!-- card -->
+  </div>
+  <!-- for cart details -->
+
+  <!-- for total coloumn -->
+  <div class="col-sm-3">
+    <div class="card" id="cart-card">
+      <div class="card-header">PRICE DETAILS</div>
+      <div class="card-body">
+        <div>Total Funds: {{netFundsQty}}</div>
+        <div>Amount Payable: <i class="fas fa-rupee-sign"></i>
+          {{netFundsAmt}}</div>
+      </div>
+      <div class="card-footer card-footer-btn">
+        <a (click)="onPurchase()">PLACE ORDER</a>
+      </div>
+    </div>
+  </div>
+  <!-- for total coloumn -->
+</div>

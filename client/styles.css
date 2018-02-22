@@ -1,0 +1,78 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+.cur-pointer {
+    cursor: pointer;
+}
+
+.text-Link {
+        /* text-decoration: underline!important; */
+        color: blue!important;
+        cursor: pointer;
+}
+
+.text-Link:hover {
+    text-decoration: underline!important;
+}
+
+.btn, .card{
+    border-radius: 0 !important;
+}
+
+.btnRed{
+    color:red!important;
+}
+
+.btnOrange{
+    color:orange!important;
+}
+
+.btnGreen{
+    color:#8BC34A!important;
+}
+
+.btnPesto{
+    color:#00AA8D!important;
+}
+
+.btnYellow{
+    color:yellow!important;
+}
+
+.btnSkyblue{
+    color:skyblue!important;
+}
+
+.btnBlack{
+    color:black!important;
+}
+
+.btnWhite{
+    color:white!important;
+}
+
+
+select {
+    border-left: none !important;
+    border-bottom: 1px solid #bdbdbd;
+    border-top: none !important;
+    border-right: none !important;
+    height: 3.3rem !important;
+  }
+
+  select:focus {
+    border-bottom: 1px solid #4285F4 !important;
+    box-shadow: 0 1px 0 0 #4285F4 !important;
+  }
+
+
+  .nav-link p-2{
+      color: white;
+  }
+  .nav-item a{
+      color: black!important;;
+  }
+
+  .hm-black-light .full-bg-img, .hm-black-light .mask {
+    background-color: rgba(0,0,0,.1) !important;
+  }

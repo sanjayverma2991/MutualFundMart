@@ -1,0 +1,135 @@
+<br/><br/><br/><br/>
+<div class="text-center" *ngIf='!categories.length'>
+    No Category yet. Please add one.
+</div>
+
+<div class="row" *ngIf='categories && categories.length'>
+    <div class="card-group col-sm-3 mb-5" *ngFor='let category of categories | categoryFilter: nameFilter'>
+        <div class="card">
+            <img class="card-img-top" [src]="catgImgSrcPrefix + category.c_img + imgJPGExtension" alt="category_image">
+            <div class="card-body">
+                <h3 class="card-title cur-pointer" [routerLink]="['/view', category.catg_id.toString()]">{{ category.c_name | uppercase }}</h3>
+                <p class="card-text">{{ category.c_description | slice:0:100 }}
+                    <a class="text-Link" *ngIf="category.c_description.length > 100" [routerLink]="['/view', category.catg_id.toString()]"> ..more</a>
+                </p>
+            </div>
+
+            <div class="card-footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-5 text-left">
+                            <small class="text-muted">Schemes: &nbsp;{{category.scheme.length}}</small>
+                        </div>
+
+                        <div class="col-sm-7 text-right">
+                            <button type="button" class="btn btn-link btn-sm p-0" [routerLink]="['/view', category.catg_id.toString()]">
+                                <i class="fas fa-eye fa-lg btnBlack" data-fa-transform="grow-2"></i>
+                            </button>
+
+                            <button type="button" class="btn btn-link btn-sm p-0" *ngIf="_usersService.isPrivilegeUser() && !category.scheme.length" (click)="deleteCategory(category.catg_id, category.c_name)">
+                                <i class="fas fa-trash-alt fa-lg btnBlack" data-fa-transform="grow-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- footer row -->
+            </div>
+            <!-- card footer-->
+        </div>
+    </div>
+    <!-- </div> -->
+</div>
+
+<br/>
+<br/>
+
+<!-- add category button -->
+<div class="fixed-bottom text-right m-3" *ngIf="_usersService.isPrivilegeUser()">
+    <button type="button" class="btn btn-link p-0" data-toggle="modal" data-target="#addCatg" (click)="dismissCatgModal(); catgAddRef.resetForm()" >
+        <i class="fas fa-plus-circle fa-4x btnRed"></i>
+    </button>
+
+    <button type="button" class="btn btn-link p-0" [routerLink]="['/charts']">
+            <i class="fas fa-chart-area fa-4x btnOrange" data-fa-transform="shrink-5.0" data-fa-mask="fas fa-circle"></i>
+    </button>
+
+    <button type="button" class="btn btn-link p-0" [routerLink]="['/purchaseHistory']">
+            <i class="fas fa-history fa-4x btnRed" data-fa-transform="shrink-5.0" data-fa-mask="fas fa-circle"></i>
+    </button>
+</div>
+
+<!-- modal for adding category -->
+<div class="modal fade" id="addCatg" tabindex="-1" role="dialog" aria-labelledby="addCatgTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCatgTitle">Add new category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="dismissCatgModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!-- add category modal header -->
+
+            <div class="modal-body">
+                <div class="container">
+                    <form class="form-horizontal" role="form" #catgAddRef="ngForm" (ngSubmit)="onAddCatg(catgAddRef.value); catgAddRef.resetForm()">
+                        <div class="form-row">
+                            <div class="form-group col-md-8">
+                                <label for="c_nameAM">Name</label>
+                                <input type="text" class="form-control" id="c_nameAM" name="c_nameAM" [(ngModel)]="c_nameAM" required minlength="3" #cnameRef="ngModel">
+                                <div *ngIf="cnameRef.invalid && (cnameRef.dirty || cnameRef.touched)" class="alert alert-danger">
+                                    <div *ngIf="cnameRef.errors.required">
+                                        *required
+                                    </div>
+                                    <div *ngIf="cnameRef.errors.minlength">
+                                        *minimum 3 characters long
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="c_imgAM">Choose image</label>
+                                <select class="form-control" id="c_imgAM" name="c_imgAM" [(ngModel)]="c_imgAM" #cImgRef="ngModel">
+                                    <option *ngFor="let _color of img_colors" [value]="_color">
+                                        {{_color}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-group-lg" >
+                            <label for="c_descriptionAM">Description</label>
+                            <textarea class="form-control" id="c_descriptionAM" name="c_descriptionAM" [(ngModel)]="c_descriptionAM" required minlength="10"
+                                rows="7" #cdescriptionRef="ngModel"></textarea>
+                            <div *ngIf="cdescriptionRef.invalid && (cdescriptionRef.dirty || cdescriptionRef.touched)" class="alert alert-danger">
+                                <div *ngIf="cdescriptionRef.errors.required">
+                                    *required
+                                </div>
+                                <div *ngIf="cdescriptionRef.errors.minlength">
+                                    *minimum 10 characters long
+                                </div>
+                            </div>
+                        </div>
+                        < >
+
+                        <!-- for footer -->
+                        <div class="row">
+                            <div class="col-sm-12 text-right">
+                                <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal" (click)="dismissCatgModal(); catgAddRef.resetForm()">Close</button>
+                                <button type="submit" class="btn btn-primary btn-lg" [disabled]="catgAddRef.invalid">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- add catg modal body -->
+
+            <!-- <div class="modal-footer">
+                <div class="container-fluid">
+                    
+                </div>
+            </div> add category modal footer -->
+        </div>
+        <!-- add category modal content -->
+    </div>
+</div>
+<!-- modal for adding category -->

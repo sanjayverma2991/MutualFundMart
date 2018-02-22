@@ -1,0 +1,55 @@
+.top-nav-collapse {
+    background-color: #78909c !important; 
+}
+.navbar:not(.top-nav-collapse) {
+    background: transparent !important;
+}
+@media (max-width: 768px) {
+    .navbar:not(.top-nav-collapse) {
+        background: #78909c !important;
+    } 
+}
+h1 {
+    letter-spacing: 8px;
+}
+h5 {
+    letter-spacing: 3px;
+}
+.hr-light {
+    border-top: 3px solid #fff;
+    width: 80px;
+}
+@media (max-width: 740px) {
+    .full-height,
+    .full-height body,
+    .full-height header,
+    .full-height header .view {
+        height: 700px; 
+    } 
+}
+    
+
+
+.card
+{
+    
+    max-width: 19.2rem;
+}
+
+.btnKnowMore:hover{
+    background-color: #078d07e6 !important;
+}
+
+.btnKnowMore {
+    border: 2px solid green;
+    background-color: transparent !important;
+    font-weight: bolder;
+    color: black !important;
+}
+
+.grow {
+    transition: all .2s ease-in-out !important;
+}
+.grow:hover {
+    transform: scale(1.1) !important;
+}
