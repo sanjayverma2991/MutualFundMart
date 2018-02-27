@@ -84,7 +84,7 @@ router.post('/user_create', (req, res, next) => {
 		var now = new Date(); 
 		//var dateFormatted = dateFormat(now, "ddd, mmm d, yyyy, HH:MM:ss:l, Z");
 
-		RECORD.findOne({collection_name: "user_id"}, 
+		RECORD.findOne({collection_name: "+++++++"}, 
 			(err, _collection) => {
 				if (err) {
 					console.log("/api/users/post BAD REQUEST");
