@@ -6,7 +6,8 @@ import 'rxjs/add/operator/map'
 @Injectable()
 export class CategoriesService 
 {
-  img_colors : string[] = ["Black", "Red", "Indigo", "Green", "Orange", "Purple", "Brown", "Turquoise", "White", "Grey", "Lavender", "Yellow", "Pink", "Gold","HDFC","ICICI","SBI","AXIS"];
+  img_colors : string[] = ["DEBT", "EQUITY", "ETF", "FOF", "HYBRID", "LIQUID","HDFC","ICICI","SBI","AXIS"];
+  // img_colors : string[] = ["HDFC","ICICI","SBI","AXIS","Equity"];
   
   constructor(private _http: Http)
     {

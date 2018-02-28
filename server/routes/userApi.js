@@ -84,7 +84,7 @@ router.post('/user_create', (req, res, next) => {
 		var now = new Date(); 
 		//var dateFormatted = dateFormat(now, "ddd, mmm d, yyyy, HH:MM:ss:l, Z");
 
-		RECORD.findOne({collection_name: "+++++++"}, 
+		RECORD.findOne({collection_name: "user_id"}, 
 			(err, _collection) => {
 				if (err) {
 					console.log("/api/users/post BAD REQUEST");
@@ -273,12 +273,12 @@ router.put('/toggle_privilege', function(req, res) {
 		});
 	}
 	else {
-	USER.update({ email_id: req.body.email_id },
-	{
-		$set: {
-			privilege: req.body.privilege
-		}
-	}, 
+		USER.update({ email_id: req.body.email_id },
+		{
+			$set: {
+				privilege: req.body.privilege
+			}
+		}, 
 	{multi: false},
 	(err, success) => {
 			if (err) {

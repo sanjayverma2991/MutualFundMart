@@ -1,26 +1,110 @@
-<br/><br/><br/><br/><div class="row">
-  <div class="col-sm-6" style="display: block;">
-    <canvas baseChart width="300" height="200"
-            [datasets]="barChartData"
-            [labels]="barChartLabels"
-            [options]="barChartOptions"
-            [legend]="barChartLegend"
-            [chartType]="barChartType"
-            (chartHover)="chartHovered($event)"
-            (chartClick)="chartClicked($event)"></canvas>
-  </div>
+<br/><br/><br/><br/><div class="container">
+  <!-- <div class="row"> -->
+    <div class="card-group">
+      <div class="card mr-3">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-6">
+              <h3 class="card-title">Top Investors</h3>
+            </div>
+            <div class="col-sm-6">
+              <select class="form-control" id="userChartID" name="userChartID" (change)="showUserChart()" [(ngModel)]="userChart">
+                <option value="net_funds">Funds</option>
+                <option value="net_amount">Amounts</option>
+              </select>
+            </div>
+          </div>
+          <!-- for header -->
+          <div style="display: block" *ngIf="userChartReady && (userChart == 'net_funds')">
+            <canvas baseChart width="300" height="200" 
+                    [datasets]="userFundBarData" 
+                    [labels]="userBarNetFundLabels" 
+                    [options]="userBarOptions"
+                    [legend]="userBarLegend" 
+                    [chartType]="userBarType" 
+                    (chartHover)="chartHovered($event)" 
+                    (chartClick)="chartClicked($event)">
+            </canvas>
+          </div>
+          <div style="display: block" *ngIf="userChartReady && (userChart == 'net_amount')">
+            <canvas baseChart width="300" height="200" 
+                    [datasets]="userAmountBarData" 
+                    [labels]="userBarNetAmountLabels" 
+                    [options]="userBarOptions"
+                    [legend]="userBarLegend" 
+                    [chartType]="userBarType" 
+                    (chartHover)="chartHovered($event)" 
+                    (chartClick)="chartClicked($event)">
+            </canvas>
+          </div>
+        </div>
+      </div>
+      <!-- user chart -->
 
-  <div class="col-sm-6">
-      <div style="display: block;">
-      <canvas baseChart width="300" height="200"
-                  [datasets]="lineChartData"
-                  [labels]="lineChartLabels"
-                  [options]="lineChartOptions"
-                  [colors]="lineChartColors"
-                  [legend]="lineChartLegend"
-                  [chartType]="lineChartType"
+      <!-- category chart -->
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-6">
+              <h4 class="card-title">Top Funds from Categories</h4>
+            </div>
+            <div class="col-sm-6">
+              <select class="form-control" id="catgChartID" name="catgChartID" (change)="populateCatgGraph()" [(ngModel)]="catgChart">
+                <option *ngFor="let _catg of categories" [value]="_catg.catg_id">
+                  {{_catg.c_name}}
+                </option>
+              </select>
+            </div>
+          </div>
+          <!-- for header -->
+          <div style="display: block" *ngIf="catgChartReady && (catgPieLabels[0] != 'No funds are sold')">
+            <canvas baseChart width="300" height="200" 
+                    [datasets]="catgPieData" 
+                    [labels]="catgPieLabels" 
+                    [chartType]="catgPieType" 
+                    (chartHover)="chartHovered($event)"
+                    (chartClick)="chartClicked($event)">
+            </canvas>
+          </div>
+          <div *ngIf="catgPieLabels[0] == 'No funds are sold'">
+            <br> <br>
+            <p class="text-muted text-center">No funds are sold yet</p>
+          </div>
+        </div>
+      </div>
+      <!-- category chart -->
+    </div>
+    <div class="card col-xl-12 mt-3">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-6">
+            <h3 class="card-title">Top Funds</h3>
+          </div>
+          <div class="col-sm-6">
+            <select class="form-control" id="fundChartID" name="fundChartID" (change)="populateFundGraph()" [(ngModel)]="fundChart">
+              <option value="sold">Sold</option>
+              <option value="NAV">NAV</option>
+            </select>
+          </div>
+        </div>
+        <!-- for header -->
+        <div style="display: block" *ngIf="fundChartReady && (fundLineLabels[0] != 'No funds are sold')">
+          <canvas baseChart width="300" height="150" 
+                  [datasets]="fundLineData"
+                  [labels]="fundLineLabels"
+                  [options]="fundLineOptions"
+                  [colors]="fundLineColors"
+                  [legend]="fundLineLegend"
+                  [chartType]="fundLineType"
                   (chartHover)="chartHovered($event)"
-                  (chartClick)="chartClicked($event)"></canvas>
+                  (chartClick)="chartClicked($event)">
+          </canvas>
+        </div>
+        <div *ngIf="catgPieLabels[0] == 'No funds are sold/NAV'">
+          <br> <br>
+          <p class="text-muted text-center">No funds are sold yet</p>
+        </div>
       </div>
     </div>
+  <!-- </div> -->
 </div>
