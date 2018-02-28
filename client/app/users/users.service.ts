@@ -24,7 +24,7 @@ export class UsersService extends UserCookie
 
     this.load();
 
-    this._userUrl = "http://localhost:4444/api/users/";
+    this._userUrl = "https://mutual-fund-mart.herokuapp.com/api/users/";
     this.user = {};
   }
   

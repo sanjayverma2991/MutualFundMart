@@ -2451,7 +2451,7 @@ var UsersService = (function (_super) {
         _this._snackBar = _snackBar;
         console.log("Initializing Users service ...");
         _this.load();
-        _this._userUrl = "http://localhost:4444/api/users/";
+        _this._userUrl = "https://mutual-fund-mart.herokuapp.com/api/users/";
         _this.user = {};
         return _this;
     }
