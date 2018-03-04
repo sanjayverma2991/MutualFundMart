@@ -63,7 +63,7 @@
 
                 </ul>
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item" *ngIf="!auth"><a class="btn btn-danger" data-toggle="modal" data-target="#LoginModal" href="">Login / SignUp</a></li>
+                    <li class="nav-item" *ngIf="!auth" id="lblLogin"><a class="btn btn-danger" data-toggle="modal" data-target="#LoginModal" href="">Login / SignUp</a></li>
                     <li class="nav-item dropdown" *ngIf="auth">
                         <a class="nav-link dropdown-toggle active" id="navbarDropdownUserLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  >
                             <i class="fas fa-user-circle"></i>
@@ -146,7 +146,7 @@
 
                                                     <div class="modal-footer"style="border-top-color: white">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-primary" [disabled]="loginRef.invalid">Sign in</button>
+                                                        <button type="submit" id="btnsubmit" class="btn btn-primary" [disabled]="loginRef.invalid">Sign in</button>
                                                     </div>
                                                 </form>
                                             </div>
