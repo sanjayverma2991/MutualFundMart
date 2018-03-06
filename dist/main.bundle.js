@@ -593,7 +593,7 @@ var CategoriesService = (function () {
     function CategoriesService(_http) {
         this._http = _http;
         this.img_colors = ["DEBT", "EQUITY", "ETF", "FOF", "HYBRID", "LIQUID", "HDFC", "ICICI", "SBI", "AXIS"];
-        this._categoryUrl = "http://localhost:4444/api/categories/";
+        this._categoryUrl = "https://mutual-fund-mart.herokuapp.com/api/categories/";
         console.log("Initializing Categories service ...");
     }
     CategoriesService.prototype.getCategories = function () {
@@ -1808,11 +1808,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var PurchasesService = (function () {
-    //private _categoryUrl = "http://localhost:4444/api/categories/";
-    //private _userUrl = "http://localhost:4444/api/categories/";
     function PurchasesService(_http) {
         this._http = _http;
-        this._purchaseUrl = "http://localhost:4444/api/purchases/";
+        this._purchaseUrl = "https://mutual-fund-mart.herokuapp.com/api/purchases/";
         console.log("Initializing Purchases service ...");
     }
     PurchasesService.prototype.changeQty = function (_fund) {
@@ -2451,7 +2449,7 @@ var UsersService = (function (_super) {
         _this._snackBar = _snackBar;
         console.log("Initializing Users service ...");
         _this.load();
-        _this._userUrl = "http://localhost:4444/api/users/";
+        _this._userUrl = "https://mutual-fund-mart.herokuapp.com/api/users/";
         _this.user = {};
         return _this;
     }
