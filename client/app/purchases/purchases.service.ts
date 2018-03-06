@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map'
 @Injectable()
 export class PurchasesService 
 {
-    private _purchaseUrl = "https://mutual-fund-mart.herokuapp.com/api/purchases/";
+    private _purchaseUrl = "http://localhost:4444/api/purchases/";
     //private _categoryUrl = "http://localhost:4444/api/categories/";
     //private _userUrl = "http://localhost:4444/api/categories/";
 

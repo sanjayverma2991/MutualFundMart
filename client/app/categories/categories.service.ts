@@ -13,7 +13,7 @@ export class CategoriesService
     {
       console.log("Initializing Categories service ...");
    }
-   private _categoryUrl = "https://mutual-fund-mart.herokuapp.com/api/categories/";
+   private _categoryUrl = "http://localhost:4444/api/categories/";
 
   getCategories() : any {
     return this._http.get(this._categoryUrl)
